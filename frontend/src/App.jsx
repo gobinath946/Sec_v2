@@ -19,6 +19,7 @@ import Controller from "./Service/ApiController";
 import EsignTC from "./Lib/EsignTC";
 import AjmInsurance from "./Components/Ajm/AjmInsurance/AjmInsurance";
 import LandingPage from "./Components/LandingPage/LandingPage";
+import Register from "./Components/Register/Register";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/otp" element={<DynamicOtp />} />
         <Route path="/master/:role/settings" element={<AdminWithRoleCheck />} />
         <Route path="/resetpassword" element={<ResetPassword />} />

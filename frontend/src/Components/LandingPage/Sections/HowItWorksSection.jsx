@@ -45,43 +45,31 @@ const HowItWorksSection = () => {
   ];
 
   return (
-    <section id="how-it-works" className="py-20 bg-gradient-to-br from-gray-50 to-green-50">
+    <section id="how-it-works" className="py-12 bg-gradient-to-br from-gray-50 to-green-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <span className="text-green-600 font-semibold text-sm uppercase tracking-wide">How It Works</span>
-          <h2 className="mt-3 text-4xl md:text-5xl font-bold text-gray-900">
+        <div className="text-center mb-10">
+          <span className="text-green-600 font-semibold text-xs uppercase tracking-wide">How It Works</span>
+          <h2 className="mt-2 text-3xl md:text-4xl font-bold text-gray-900">
             Get Documents Signed in
             <span className="block text-green-600">4 Simple Steps</span>
           </h2>
-          <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
-            Our intuitive process makes digital signing effortless
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-          {/* Connection Lines */}
-          <div className="hidden lg:block absolute top-24 left-0 right-0 h-0.5 bg-gradient-to-r from-green-200 via-green-400 to-green-200 z-0"></div>
-
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {steps.map((step, index) => (
             <div key={index} className="relative z-10">
-              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-                <div className="flex justify-between items-start mb-6">
-                  <div className="text-6xl font-bold text-green-100">{step.number}</div>
-                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+              <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="text-4xl font-bold text-green-100">{step.number}</div>
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center text-white shadow-md">
                     {step.icon}
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">{step.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{step.description}</p>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="mt-16 text-center">
-          <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-            Start Signing Now
-          </button>
         </div>
       </div>
     </section>

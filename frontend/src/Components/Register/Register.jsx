@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import { apiEndPoint } from "../../Service/ApiConstant";
-import Controller from "../../Service/ApiController";
 
-const LoginForm = () => {
+const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email_id: "",
+    name: "",
+    email: "",
     password: "",
+    confirmPassword: "",
   });
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const handleChange = (e) => {
@@ -21,38 +22,29 @@ const LoginForm = () => {
     });
   };
 
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const result = await Controller.ApiController(
-        formData,
-        apiEndPoint.ADMIN_LOGIN,
-        "POST"
-      );
-      if (result.success === true) {
-        const { token, companyPermissions, email_id, userName, user_uid } =
-          result.data;
-        sessionStorage.setItem("token", token);
-        sessionStorage.setItem("email_id", email_id);
-        sessionStorage.setItem("UserName", userName);
-        sessionStorage.setItem("userUid", user_uid);
-        navigate(`master/${companyPermissions}/settings`);
-      } else {
-        enqueueSnackbar(`${result.data}`, {
-          variant: "error",
-          anchorOrigin: {
-            vertical: "bottom",
-            horizontal: "right",
-          },
-        });
-      }
-    } catch (error) {
-      console.log("Login.js", error);
+    
+    if (formData.password !== formData.confirmPassword) {
+      enqueueSnackbar("Passwords do not match", {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "right",
+        },
+      });
+      return;
     }
+
+    // Add your registration API call here
+    console.log("Registration data:", formData);
+    enqueueSnackbar("Registration successful!", {
+      variant: "success",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+    });
   };
 
   return (
@@ -78,12 +70,12 @@ const LoginForm = () => {
           </div>
 
           <h1 className="text-5xl font-bold text-white mb-6 leading-tight">
-            Welcome Back to
-            <span className="block">Digital Signatures</span>
+            Start Your Journey with
+            <span className="block">Secure Digital Signatures</span>
           </h1>
 
           <p className="text-xl text-green-100 mb-8 leading-relaxed">
-            Sign in to access your secure document signing platform. Manage, send, and track all your digital signatures in one place.
+            Join thousands of businesses who trust SecureGateway for their document signing needs. Get started in minutes.
           </p>
 
           <div className="space-y-4">
@@ -94,8 +86,8 @@ const LoginForm = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-white font-semibold text-lg mb-1">Bank-Level Security</h3>
-                <p className="text-green-100">Your documents are protected with 256-bit encryption</p>
+                <h3 className="text-white font-semibold text-lg mb-1">Free Trial Included</h3>
+                <p className="text-green-100">Start with 5 free documents per month, no credit card required</p>
               </div>
             </div>
 
@@ -106,8 +98,8 @@ const LoginForm = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-white font-semibold text-lg mb-1">Legally Binding</h3>
-                <p className="text-green-100">Compliant with international e-signature laws</p>
+                <h3 className="text-white font-semibold text-lg mb-1">Quick Setup</h3>
+                <p className="text-green-100">Get up and running in less than 2 minutes</p>
               </div>
             </div>
 
@@ -118,8 +110,8 @@ const LoginForm = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-white font-semibold text-lg mb-1">Real-Time Tracking</h3>
-                <p className="text-green-100">Monitor document status with detailed audit trails</p>
+                <h3 className="text-white font-semibold text-lg mb-1">24/7 Support</h3>
+                <p className="text-green-100">Our team is here to help you succeed</p>
               </div>
             </div>
           </div>
@@ -139,20 +131,36 @@ const LoginForm = () => {
               </svg>
               Back to Home
             </button>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Sign In</h2>
-            <p className="text-gray-600">Enter your credentials to access your account</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
+            <p className="text-gray-600">Sign up to start using SecureGateway</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email_id" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                Full Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none"
+                placeholder="John Doe"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address
               </label>
               <input
                 type="email"
-                id="email_id"
-                name="email_id"
-                value={formData.email_id}
+                id="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none"
@@ -173,11 +181,11 @@ const LoginForm = () => {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none pr-12"
-                  placeholder="Enter your password"
+                  placeholder="Create a password"
                 />
                 <button
                   type="button"
-                  onClick={handleTogglePasswordVisibility}
+                  onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
                   {showPassword ? (
@@ -194,35 +202,72 @@ const LoginForm = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                Confirm Password
+              </label>
+              <div className="relative">
                 <input
-                  id="remember"
-                  type="checkbox"
-                  className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none pr-12"
+                  placeholder="Confirm your password"
                 />
-                <label htmlFor="remember" className="ml-2 text-sm text-gray-700">
-                  Remember me
-                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showConfirmPassword ? (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    </svg>
+                  )}
+                </button>
               </div>
-              <Link to="/resetpassword" className="text-sm text-green-600 hover:text-green-700 font-medium">
-                Forgot password?
-              </Link>
+            </div>
+
+            <div className="flex items-start">
+              <input
+                id="terms"
+                type="checkbox"
+                required
+                className="w-4 h-4 mt-1 text-green-600 border-gray-300 rounded focus:ring-green-500"
+              />
+              <label htmlFor="terms" className="ml-2 text-sm text-gray-700">
+                I agree to the{' '}
+                <a href="#" className="text-green-600 hover:text-green-700 font-medium">
+                  Terms of Service
+                </a>{' '}
+                and{' '}
+                <a href="#" className="text-green-600 hover:text-green-700 font-medium">
+                  Privacy Policy
+                </a>
+              </label>
             </div>
 
             <button
               type="submit"
               className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
             >
-              Sign In
+              Create Account
             </button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
-              <Link to="/register" className="text-green-600 hover:text-green-700 font-semibold">
-                Sign up
+              Already have an account?{' '}
+              <Link to="/login" className="text-green-600 hover:text-green-700 font-semibold">
+                Sign in
               </Link>
             </p>
           </div>
@@ -232,4 +277,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default Register;

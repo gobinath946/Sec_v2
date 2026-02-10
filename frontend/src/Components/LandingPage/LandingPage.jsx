@@ -1,4 +1,6 @@
 import React from 'react';
+import Navbar from './Navbar';
+import ScrollToTop from './ScrollToTop';
 import HeroSection from './Sections/HeroSection';
 import FeaturesSection from './Sections/FeaturesSection';
 import HowItWorksSection from './Sections/HowItWorksSection';
@@ -14,6 +16,7 @@ import Footer from '../Footer/Footer';
 const LandingPage = () => {
   return (
     <div className="min-h-screen bg-white">
+      <Navbar />
       <HeroSection />
       <FeaturesSection />
       <HowItWorksSection />
@@ -25,6 +28,7 @@ const LandingPage = () => {
       <FAQSection />
       <CTASection />
       <Footer />
+      <ScrollToTop />
     </div>
   );
 };
