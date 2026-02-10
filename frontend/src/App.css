@@ -1,0 +1,67 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+:root {
+  --pinky: linear-gradient(195deg, rgb(236, 64, 122), rgb(216, 27, 96));
+  --blacky: linear-gradient(195deg, rgb(66, 66, 74), rgb(25, 25, 25));
+  --bluey: linear-gradient(195deg, rgb(73, 163, 241), rgb(26, 115, 232));
+  --greeny: linear-gradient(195deg, rgb(102, 187, 106), rgb(67, 160, 71));
+  --orangy: linear-gradient(195deg, rgb(255, 167, 38), rgb(251, 140, 0));
+  --redy: linear-gradient(195deg, rgb(239, 83, 80), rgb(229, 57, 53));
+  --violety: linear-gradient(195deg, rgb(123, 31, 162), rgb(94, 53, 177));
+  --yellowy: linear-gradient(195deg, rgb(255, 235, 59), rgb(255, 193, 7));  
+  --cyan: linear-gradient(195deg, rgb(0, 188, 212), rgb(0, 150, 136));      
+  --indigoy: linear-gradient(195deg, rgb(63, 81, 181), rgb(25, 118, 210));  
+  --tealy: linear-gradient(195deg, rgb(0, 150, 136), rgb(0, 77, 64));    
+  --goldy: linear-gradient(195deg, rgb(255, 193, 7), rgb(255, 152, 0));     
+  --browny: linear-gradient(195deg, rgb(121, 85, 72), rgb(78, 52, 46));     
+  --gray: linear-gradient(195deg, rgb(158, 158, 158), rgb(97, 97, 97));    
+}
+
+.orangy {
+  background: var(--orangy);
+}
+.pinky {
+  background: var(--pinky);
+}
+.blacky {
+  background: var(--blacky);
+}
+.bluey {
+  background: var(--bluey);
+}
+.greeny {
+  background: var(--greeny);
+}
+.redy {
+  background: var(--redy);
+}
+.violety {
+  background: var(--violety);
+}
+.yellowy {
+  background: var(--yellowy);
+}
+.cyan {
+  background: var(--cyan);
+}
+.indigoy {
+  background: var(--indigoy);
+}
+.tealy {
+  background: var(--tealy);
+}
+.goldy {
+  background: var(--goldy);
+}
+.browny {
+  background: var(--browny);
+}
+.gray {
+  background: var(--gray);
+}
+

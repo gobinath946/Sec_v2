@@ -1,12 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Secure Gateway - E-sign Platform</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Secure Gateway - E-Sign Application" />
+  <link rel="apple-touch-icon" href="/logo192.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <title>Secure Gateway</title>
+</head>
+
+<body>
+  <script>
+    var currentUrl = window.location.href;
+    var source = null;
+    var otpPage = false;
+    var auth = false;
+    var stepperEmail = null;
+    var stepperRole = null;
+
+    if (currentUrl.includes("messagedetail")) {
+      var parts = currentUrl.split("/");
+      var index = parts.indexOf("messagedetail") + 2;
+      var value = parts[index];
+      sessionStorage.setItem("TempName", value);
+      sessionStorage.setItem("action", parts[index - 1]);
+      var uid = parts.pop().split("?")[0];
+      sessionStorage.setItem("uid", uid);
+
+      var urlParams = currentUrl.split("?").slice(1); 
+      for (var i = 0; i < urlParams.length; i++) {
+        var paramParts = urlParams[i].split("=");
+        if (paramParts[0] === 'source') {
+          source = paramParts[1];
+        } else if (paramParts[0] === 'otp_page') {
+          otpPage = paramParts[1] === 'true';
+        } else if (paramParts[0] === 'stepper_email') {
+          stepperEmail = paramParts[1];
+        } else if (paramParts[0] === 'stepper_role') {
+          stepperRole = paramParts[1];
+        }
+      }
+    }
+
+    sessionStorage.setItem("auth", otpPage);
+    sessionStorage.setItem("source", source);
+    sessionStorage.setItem("stepper_email", stepperEmail);
+    sessionStorage.setItem("stepper_role", stepperRole);
+
+    window.history.replaceState({}, document.title, window.location.pathname);
+  </script>
+
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>

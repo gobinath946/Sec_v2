@@ -1,0 +1,120 @@
+
+@font-face {
+    font-family: 'monsieur';
+    src: url('./Signature_Fonts/monsieur-la-doulaise/MonsieurLaDoulaise-Regular.ttf') format('truetype');
+  }
+@font-face {
+    font-family: 'Sophia';
+    src: url('./Signature_Fonts/sophia-bella-demo/Sophia\ Bella\ DEMO.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'Halana';
+    src: url('./Signature_Fonts/halana/Halana Demo.otf') format('opentype');
+}
+  @font-face {
+    font-family: 'Poppins';
+    src: url('./Signature_Fonts//Poppins/Poppins-Regular.ttf') format('opentype');
+}
+
+
+  
+.signature-pad {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+.signature-box {
+    width: 100%;
+    height: 250px;
+    border: 2px dashed #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.signature-image {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.modal-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 24px;
+    border-radius: 8px;
+    max-height: 80vh; /* Set a maximum height for the modal */
+    overflow-y: auto; /* Add vertical scrolling if content exceeds max-height */
+}
+
+.signature-draw, .signature-image, .signature-type {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.sigCanvas {
+    border: 1px solid #000;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.modal-actions button {
+    margin-left: 10px;
+}
+
+@media (max-width: 600px) {
+    .signature-box {
+        height: 150px;
+    }
+
+    .modal-box {
+        width: 90%;
+        padding: 10px;
+    }
+
+    .modal-title {
+        font-size: 1.2rem;
+    }
+
+    .sigCanvas {
+        height: 150px;
+    }
+}
+
+
+/* SignaturePad.css */
+.sigCanvas {
+    cursor: crosshair; /* This will show a crosshair cursor on the canvas */
+    position: relative;
+  }
+  
+  .signature-pad .signature-draw {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .signature-canvas-container {
+    position: relative;
+    width: 500px;
+    height: 200px;
+  }
+  

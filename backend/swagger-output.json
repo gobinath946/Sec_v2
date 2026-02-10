@@ -1,0 +1,680 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Secure Gateway",
+    "description": "Description",
+    "version": "1.0.0"
+  },
+  "host": "localhost:8083",
+  "basePath": "/",
+  "schemes": ["http"],
+  "tags": [
+    { "name": "Otp", "description": "Operations related to Otp" },
+    { "name": "User", "description": "Operations related to users" },
+    { "name": "Customer", "description": "Operations related to customers" },
+    { "name": "Message", "description": "Operations related to messages" },
+    {
+      "name": "Distribution",
+      "description": "Operations related to distribution creation"
+    },
+    { "name": "Branding", "description": "Operations related to brandings" }
+  ],
+  "paths": {
+    "/send_otp": {
+      "post": {
+        "tags": ["Otp"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mobileNumber": {
+                  "example": "any"
+                },
+                "customer_id": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "source": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/verify_otp": {
+      "post": {
+        "tags": ["Otp"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mobileNumber": {
+                  "example": "any"
+                },
+                "verificationCode": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/message/{uid}": {
+      "get": {
+        "tags": ["Message"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Message"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "example": "any"
+                },
+                "action": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/message_branding/{uid}": {
+      "get": {
+        "tags": ["Message"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/message/files/{uid}": {
+      "put": {
+        "tags": ["Message"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "example": "any"
+                },
+                "service": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/distribution/{token}": {
+      "post": {
+        "tags": ["Distribution"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "example": "any"
+                },
+                "msg_service": {
+                  "example": "any"
+                },
+                "recipients": {
+                  "example": "any"
+                },
+                "message_id": {
+                  "example": "any"
+                },
+                "file_service": {
+                  "example": "any"
+                },
+                "interested_services": {
+                  "example": "any"
+                },
+                "recipient_Id": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user/{user_uid}": {
+      "get": {
+        "tags": ["User"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_uid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "tags": ["User"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_uid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "company_level_permissions": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_uid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/{currentPage}": {
+      "get": {
+        "tags": ["User"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "currentPage",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "input",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": ["User"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "email_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "company_level_permissions": {
+                  "example": "any"
+                },
+                "email_id": {
+                  "example": "any"
+                },
+                "user_name": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "user_uid": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["User"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email_id": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/logout/{email_id}": {
+      "post": {
+        "tags": ["User"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "email_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/customer/{user_uid}": {
+      "get": {
+        "tags": ["Customer"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_uid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "tags": ["Customer"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_uid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "section": {
+                  "example": "any"
+                },
+                "data": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/customers/{currentPage}": {
+      "get": {
+        "tags": ["Customer"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "currentPage",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "input",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/branding/{user_uid}": {
+      "get": {
+        "tags": ["Branding"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_uid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "tags": ["Branding"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_uid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    }
+  }
+}
