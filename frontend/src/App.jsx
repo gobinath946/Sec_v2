@@ -18,14 +18,16 @@ import Controller from "./Service/ApiController";
 
 import EsignTC from "./Lib/EsignTC";
 import AjmInsurance from "./Components/Ajm/AjmInsurance/AjmInsurance";
+import LandingPage from "./Components/LandingPage/LandingPage";
 
 const App = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/otp" element={<DynamicOtp />} />
         <Route path="/master/:role/settings" element={<AdminWithRoleCheck />} />
-        <Route path="/" element={<Login />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
         <Route path="/esign_terms" element={<EsignTC />} />
         <Route path="/result/:feild/:template" element={<DynamicResult />} />
