@@ -233,6 +233,4 @@ const countryCodes = [
   ];
   
 
-module.exports = {
-     countryCodes: countryCodes
-  };
+export { countryCodes };

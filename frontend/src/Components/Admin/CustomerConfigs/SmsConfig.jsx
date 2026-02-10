@@ -17,8 +17,7 @@ import { useSnackbar } from "notistack";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { apiEndPoint } from "../../../Service/ApiConstant";
 import Controller from "../../../Service/ApiController";
-
-const Lib = require("../../../constant");
+import * as Lib from "../../../constant";
 
 const SmsConfig = ({ data, uid, onDataUpdate }) => {
   const [clicksendEnabled, setClicksendEnabled] = useState(false);

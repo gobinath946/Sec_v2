@@ -14,7 +14,7 @@ import axios from "axios";
 import "./Otp.css";
 import { useNavigate } from "react-router-dom";
 import Footer from "../Footer/Footer";
-import { useAuth } from "../PrivateRoute/AuthContext";
+import { useAuth } from "../PrivateRoute/AuthContext.jsx";
 import { BASE_URL } from "../../config";
 import { useSnackbar } from "notistack";
 import ImageDistributor from "../ImagesProvider/ImageDistributor";

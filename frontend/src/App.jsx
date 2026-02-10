@@ -5,8 +5,8 @@ import {
   Route,
   useNavigate,
 } from "react-router-dom";
-import PrivateRoute from "./Components/PrivateRoute/PrivateRoute";
-import MasterRoute from "./Components/PrivateRoute/MasterRoute";
+import PrivateRoute from "./Components/PrivateRoute/PrivateRoute.jsx";
+import MasterRoute from "./Components/PrivateRoute/MasterRoute.jsx";
 import Spinner from "./Components/Spinner/Spinner";
 import Admin from "./Components/Admin/Admin";
 import Login from "./Components/Login/Login";
@@ -113,7 +113,7 @@ const AdminWithRoleCheck = () => {
 const DynamicMain = () => {
   const Tempname = sessionStorage.getItem("TempName");
   const TemplateComponent = lazy(() =>
-    import(`./Components/${Tempname}/${Tempname}`)
+    import(`./Components/${Tempname}/${Tempname}.jsx`)
   );
   return (
     <Suspense fallback={<LoadingSpinner />}>
@@ -125,7 +125,7 @@ const DynamicMain = () => {
 const DynamicOtp = () => {
   const Tempname = sessionStorage.getItem("TempName");
   const TemplateComponent = lazy(() =>
-    import(`./Components/${Tempname}Otp/${Tempname}Otp`)
+    import(`./Components/${Tempname}Otp/${Tempname}Otp.jsx`)
   );
 
   return (
@@ -138,7 +138,7 @@ const DynamicOtp = () => {
 const DynamicResult = () => {
   const Tempname = sessionStorage.getItem("TempName");
   const TemplateComponent = lazy(() =>
-    import(`./Components/${Tempname}Result/${Tempname}Result`)
+    import(`./Components/${Tempname}Result/${Tempname}Result.jsx`)
   );
 
   return (
