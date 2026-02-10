@@ -39,26 +39,26 @@ const FAQSection = () => {
   ];
 
   return (
-    <section id="faq" className="py-12 bg-white">
+    <section id="faq" className="py-8 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
+        <div className="text-center mb-6">
           <span className="text-green-600 font-semibold text-xs uppercase tracking-wide">FAQ</span>
-          <h2 className="mt-2 text-3xl md:text-4xl font-bold text-gray-900">
+          <h2 className="mt-1.5 text-2xl md:text-3xl font-bold text-gray-900">
             Frequently Asked
             <span className="block text-green-600">Questions</span>
           </h2>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {faqs.map((faq, index) => (
             <div key={index} className="bg-white border-2 border-gray-200 rounded-lg overflow-hidden hover:border-green-500 transition-colors duration-200">
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full px-5 py-4 flex items-center justify-between text-left"
+                className="w-full px-4 py-3 flex items-center justify-between text-left"
               >
-                <span className="text-base font-semibold text-gray-900 pr-4">{faq.question}</span>
+                <span className="text-sm font-semibold text-gray-900 pr-3">{faq.question}</span>
                 <svg
-                  className={`w-5 h-5 text-green-600 flex-shrink-0 transition-transform duration-200 ${openIndex === index ? 'transform rotate-180' : ''}`}
+                  className={`w-4 h-4 text-green-600 flex-shrink-0 transition-transform duration-200 ${openIndex === index ? 'transform rotate-180' : ''}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -67,17 +67,17 @@ const FAQSection = () => {
                 </svg>
               </button>
               {openIndex === index && (
-                <div className="px-5 pb-4">
-                  <p className="text-gray-600 text-sm leading-relaxed">{faq.answer}</p>
+                <div className="px-4 pb-3">
+                  <p className="text-gray-600 text-xs leading-relaxed">{faq.answer}</p>
                 </div>
               )}
             </div>
           ))}
         </div>
 
-        <div className="mt-8 text-center">
-          <p className="text-gray-600 text-sm mb-3">Still have questions?</p>
-          <button className="text-green-600 hover:text-green-700 font-semibold">
+        <div className="mt-6 text-center">
+          <p className="text-gray-600 text-xs mb-2">Still have questions?</p>
+          <button className="text-green-600 hover:text-green-700 font-semibold text-sm">
             Contact our support team →
           </button>
         </div>

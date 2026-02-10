@@ -41,7 +41,7 @@ const SecuritySection = () => {
   ];
 
   return (
-    <section id="security" className="py-12 bg-gradient-to-br from-gray-900 to-black text-white relative overflow-hidden">
+    <section id="security" className="py-8 bg-gradient-to-br from-gray-900 to-black text-white relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{
@@ -51,28 +51,28 @@ const SecuritySection = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-10">
+        <div className="text-center mb-6">
           <span className="text-green-400 font-semibold text-xs uppercase tracking-wide">Security First</span>
-          <h2 className="mt-2 text-3xl md:text-4xl font-bold">
+          <h2 className="mt-1.5 text-2xl md:text-3xl font-bold">
             Your Documents Are
             <span className="block text-green-400">Safe With Us</span>
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {securityFeatures.map((feature, index) => (
-            <div key={index} className="bg-white/5 backdrop-blur-sm rounded-lg p-5 border border-white/10 hover:border-green-500/50 transition-all duration-300">
-              <div className="text-green-400 mb-3">{feature.icon}</div>
-              <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
-              <p className="text-gray-300 text-sm leading-relaxed">{feature.description}</p>
+            <div key={index} className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:border-green-500/50 transition-all duration-300">
+              <div className="text-green-400 mb-2">{feature.icon}</div>
+              <h3 className="text-base font-bold mb-1.5">{feature.title}</h3>
+              <p className="text-gray-300 text-xs leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>
 
-        <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-xl p-8 text-center">
-          <h3 className="text-2xl font-bold mb-3">Trusted by 10,000+ Organizations Worldwide</h3>
-          <p className="text-green-100 mb-6 max-w-2xl mx-auto">
-            Join leading companies who trust SecureGateway for their critical document signing needs
+        <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-lg p-6 text-center">
+          <h3 className="text-xl font-bold mb-2">Trusted by 10,000+ Organizations Worldwide</h3>
+          <p className="text-green-100 text-sm max-w-2xl mx-auto">
+            Join leading companies who trust SecureGateway
           </p>
         </div>
       </div>

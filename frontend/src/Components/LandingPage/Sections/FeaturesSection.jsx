@@ -78,30 +78,27 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <section id="features" className="py-12 bg-white">
+    <section id="features" className="py-8 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
+        <div className="text-center mb-6">
           <span className="text-green-600 font-semibold text-xs uppercase tracking-wide">Features</span>
-          <h2 className="mt-2 text-3xl md:text-4xl font-bold text-gray-900">
+          <h2 className="mt-1.5 text-2xl md:text-3xl font-bold text-gray-900">
             Everything You Need for
             <span className="block text-green-600">Digital Signatures</span>
           </h2>
-          <p className="mt-3 text-base text-gray-600 max-w-2xl mx-auto">
-            Powerful features designed to streamline your document signing process
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {features.map((feature, index) => (
             <div 
               key={index}
-              className="group p-5 bg-white rounded-lg border border-gray-200 hover:border-green-500 hover:shadow-lg transition-all duration-300"
+              className="group p-4 bg-white rounded-lg border border-gray-200 hover:border-green-500 hover:shadow-md transition-all duration-300"
             >
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors duration-300 mb-3">
+              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors duration-300 mb-2.5">
                 {feature.icon}
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">{feature.title}</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
+              <h3 className="text-base font-bold text-gray-900 mb-1.5">{feature.title}</h3>
+              <p className="text-gray-600 text-xs leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>

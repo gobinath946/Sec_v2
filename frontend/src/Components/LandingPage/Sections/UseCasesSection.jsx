@@ -65,27 +65,27 @@ const UseCasesSection = () => {
   ];
 
   return (
-    <section id="use-cases" className="py-12 bg-gradient-to-br from-green-50 to-white">
+    <section id="use-cases" className="py-8 bg-gradient-to-br from-green-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
+        <div className="text-center mb-6">
           <span className="text-green-600 font-semibold text-xs uppercase tracking-wide">Use Cases</span>
-          <h2 className="mt-2 text-3xl md:text-4xl font-bold text-gray-900">
+          <h2 className="mt-1.5 text-2xl md:text-3xl font-bold text-gray-900">
             Perfect for Every
             <span className="block text-green-600">Industry</span>
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {useCases.map((useCase, index) => (
-            <div key={index} className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100">
-              <div className="text-4xl mb-3">{useCase.image}</div>
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
+            <div key={index} className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
+              <div className="text-3xl mb-2">{useCase.image}</div>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
                   {useCase.icon}
                 </div>
-                <h3 className="text-lg font-bold text-gray-900">{useCase.title}</h3>
+                <h3 className="text-base font-bold text-gray-900">{useCase.title}</h3>
               </div>
-              <p className="text-gray-600 text-sm leading-relaxed">{useCase.description}</p>
+              <p className="text-gray-600 text-xs leading-relaxed">{useCase.description}</p>
             </div>
           ))}
         </div>

@@ -45,28 +45,28 @@ const HowItWorksSection = () => {
   ];
 
   return (
-    <section id="how-it-works" className="py-12 bg-gradient-to-br from-gray-50 to-green-50">
+    <section id="how-it-works" className="py-8 bg-gradient-to-br from-gray-50 to-green-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
+        <div className="text-center mb-6">
           <span className="text-green-600 font-semibold text-xs uppercase tracking-wide">How It Works</span>
-          <h2 className="mt-2 text-3xl md:text-4xl font-bold text-gray-900">
+          <h2 className="mt-1.5 text-2xl md:text-3xl font-bold text-gray-900">
             Get Documents Signed in
             <span className="block text-green-600">4 Simple Steps</span>
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {steps.map((step, index) => (
             <div key={index} className="relative z-10">
-              <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="text-4xl font-bold text-green-100">{step.number}</div>
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center text-white shadow-md">
+              <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
+                <div className="flex justify-between items-start mb-3">
+                  <div className="text-3xl font-bold text-green-100">{step.number}</div>
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center text-white shadow-sm">
                     {step.icon}
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
+                <h3 className="text-base font-bold text-gray-900 mb-1.5">{step.title}</h3>
+                <p className="text-gray-600 text-xs leading-relaxed">{step.description}</p>
               </div>
             </div>
           ))}
