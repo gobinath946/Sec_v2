@@ -1,10 +1,12 @@
 const user = require("../models/model").User;
 const Customer = require("../models/model").Customer;
-const TokenModel = require("../models/model").Token;
 const bcryptjs = require("bcryptjs");
 const crypto = require("crypto");
 const status_code = require("../Libs/constants");
 const jwt = require("jsonwebtoken");
+const { initializeCompanyDatabase } = require("../utils/companyDbInitializer");
+const { getCompanyDB } = require("../../config/dbConnectionManager");
+const { getCompanyModelsFromConnection } = require("../models/model");
 
 const createuser = async (req, res) => {
   const userData = req.body;
@@ -94,9 +96,23 @@ const createuser = async (req, res) => {
 
     const newCustomer = new Customer(customerData);
     await newCustomer.save();
+
+    // Initialize company-specific database
+    try {
+      const companyDbInfo = await initializeCompanyDatabase(newUser.user_uid);
+      console.log(`✅ Company database created: ${companyDbInfo.dbName}`);
+    } catch (dbError) {
+      console.error("⚠️  Warning: Company database initialization failed:", dbError);
+      // Don't fail registration if DB init fails - can be retried later
+    }
+
     res
       .status(status_code.SUCCESS_STATUS)
-      .json({ message: status_code.USER_CREATED_SUCESS });
+      .json({ 
+        message: status_code.USER_CREATED_SUCESS,
+        user_uid: newUser.user_uid,
+        company_name: newUser.company_name
+      });
   } catch (error) {
     console.log(error);
     res
@@ -150,18 +166,40 @@ const Login = async (req, res) => {
       secretKey,
       { expiresIn: "8h" }
     );
-    await TokenModel.create({
-      user_uid: users.user_uid,
-      token_uid: tokenUid,
-      Token: token,
-    });
+
+    // Store token in company-specific database
+    try {
+      const companyConnection = await getCompanyDB(users.user_uid);
+      const companyModels = getCompanyModelsFromConnection(companyConnection);
+      
+      await companyModels.Token.create({
+        user_uid: users.user_uid,
+        token_uid: tokenUid,
+        Token: token,
+      });
+    } catch (tokenError) {
+      console.error("Error storing token in company DB:", tokenError);
+      // Continue with login even if token storage fails
+    }
+
     await users.save();
+
+    // Get company database information
+    const crypto_module = require('crypto');
+    const hash = crypto_module.createHash('md5').update(users.user_uid).digest('hex').substring(0, 8);
+    const companyDbName = `cmp_${hash}`;
+
     return res.status(status_code.SUCCESS_STATUS).json({
       token,
       companyPermissions: users.company_level_permissions,
       email_id: users.email_id,
       userName: users.user_name,
       user_uid: users.user_uid,
+      company_name: users.company_name,
+      companyDbInfo: {
+        companyId: users.user_uid,
+        dbName: companyDbName,
+      }
     });
   } catch (err) {
     console.log(err);
@@ -196,22 +234,37 @@ const logout = async (req, res) => {
         .status(status_code.USER_NOT_FOUND_STATUS)
         .json({ message: status_code.USER_NOT_FOUND_MESSAGE });
     }
-    const latestToken = await TokenModel.findOne({
-      user_uid: users.user_uid,
-      is_active: true,
-      is_deleted: false,
-    })
-      .sort({ created_at: -1 })
-      .limit(1);
-    if (!latestToken) {
+
+    // Get token from company-specific database
+    try {
+      const companyConnection = await getCompanyDB(users.user_uid);
+      const companyModels = getCompanyModelsFromConnection(companyConnection);
+      
+      const latestToken = await companyModels.Token.findOne({
+        user_uid: users.user_uid,
+        is_active: true,
+        is_deleted: false,
+      })
+        .sort({ created_at: -1 })
+        .limit(1);
+
+      if (!latestToken) {
+        return res
+          .status(status_code.UNAUTHORIZED_STATUS)
+          .json({ error: status_code.INVALID_TOKEN });
+      }
+
+      await companyModels.Token.updateOne(
+        { _id: latestToken._id },
+        { $set: { is_deleted: true, is_active: false } }
+      );
+    } catch (tokenError) {
+      console.error("Error accessing token in company DB:", tokenError);
       return res
-        .status(status_code.UNAUTHORIZED_STATUS)
-        .json({ error: status_code.INVALID_TOKEN });
+        .status(status_code.INTERNAL_SERVER_ERROR_STATUS)
+        .json({ message: "Error logging out from company database" });
     }
-    await TokenModel.updateOne(
-      { _id: latestToken._id },
-      { $set: { is_deleted: true, is_active: false } }
-    );
+
     res
       .status(status_code.SUCCESS_STATUS)
       .json({ message: "Logged Out Successfully" });

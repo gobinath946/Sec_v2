@@ -10,9 +10,10 @@ app.get("/users/:currentPage", sessionMiddleware(ROLES.both), user.getAllUser);
 
 app.get("/hubspot/jwt_token", user.getJwtToken);
 
-app.post("/user",sessionMiddleware(ROLES.both), user.createuser);
-app.post("/login", user.Login);
-app.post("/logout/:email_id", user.logout);
+// Public routes (no authentication required)
+app.post("/user", user.createuser); // Registration endpoint - open to public
+app.post("/login", user.Login); // Login endpoint - open to public
+app.post("/logout/:email_id", user.logout); // Logout endpoint
  
 app.put("/user/:user_uid",sessionMiddleware(ROLES.both), user.updateUser);
 app.delete("/user/:user_uid",sessionMiddleware(ROLES.both), user.deleteUser);

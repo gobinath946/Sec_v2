@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import { BASE_URL } from "../../config";
+import axios from "axios";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -9,9 +11,12 @@ const Register = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    companyName: "",
+    mobileNumber: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const handleChange = (e) => {
@@ -36,15 +41,74 @@ const Register = () => {
       return;
     }
 
-    // Add your registration API call here
-    console.log("Registration data:", formData);
-    enqueueSnackbar("Registration successful!", {
-      variant: "success",
-      anchorOrigin: {
-        vertical: "bottom",
-        horizontal: "right",
-      },
-    });
+    if (formData.password.length < 6) {
+      enqueueSnackbar("Password must be at least 6 characters long", {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "right",
+        },
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Prepare registration data according to backend API
+      const registrationData = {
+        email_id: formData.email,
+        user_name: formData.name,
+        password: formData.password,
+        company_name: formData.companyName,
+        mobile_number: formData.mobileNumber,
+        company_level_permissions: ["admin"], // Default permission for new registrations
+      };
+
+      // Call the backend registration API
+      const response = await axios.post(`${BASE_URL}/user`, registrationData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        enqueueSnackbar("Registration successful! Please login to continue.", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "right",
+          },
+        });
+        
+        // Redirect to login page after successful registration
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      
+      let errorMessage = "Registration failed. Please try again.";
+      
+      if (error.response) {
+        // Server responded with error
+        errorMessage = error.response.data.message || error.response.data.error || errorMessage;
+      } else if (error.request) {
+        // Request made but no response
+        errorMessage = "Network error. Please check your connection.";
+      }
+
+      enqueueSnackbar(errorMessage, {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "right",
+        },
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -153,6 +217,22 @@ const Register = () => {
             </div>
 
             <div>
+              <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 mb-2">
+                Company Name
+              </label>
+              <input
+                type="text"
+                id="companyName"
+                name="companyName"
+                value={formData.companyName}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none"
+                placeholder="Your Company"
+              />
+            </div>
+
+            <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address
               </label>
@@ -169,6 +249,22 @@ const Register = () => {
             </div>
 
             <div>
+              <label htmlFor="mobileNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                Mobile Number
+              </label>
+              <input
+                type="tel"
+                id="mobileNumber"
+                name="mobileNumber"
+                value={formData.mobileNumber}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none"
+                placeholder="+1234567890"
+              />
+            </div>
+
+            <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                 Password
               </label>
@@ -180,8 +276,9 @@ const Register = () => {
                   value={formData.password}
                   onChange={handleChange}
                   required
+                  minLength={6}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none pr-12"
-                  placeholder="Create a password"
+                  placeholder="Create a password (min 6 characters)"
                 />
                 <button
                   type="button"
@@ -257,9 +354,20 @@ const Register = () => {
 
             <button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
+              disabled={isLoading}
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              Create Account
+              {isLoading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creating Account...
+                </>
+              ) : (
+                "Create Account"
+              )}
             </button>
           </form>
 

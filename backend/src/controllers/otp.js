@@ -1,5 +1,4 @@
-const Otp = require("../models/model").Otp;
-const Customer = require("../models/model").Customer;
+const { Customer, getCompanyModels } = require("../models/model");
 const crypto = require("crypto");
 const sendSMS = require("../Libs/clicksendsms");
 const sendEmail = require("../Libs/sendemail");
@@ -37,6 +36,11 @@ const sendOTP = async (req, res) => {
   if (!user) {
     return res.status(400).json({ error: "Invalid Customer" });
   }
+
+  // Get company-specific models
+  const companyModels = await getCompanyModels(customer_id);
+  const Otp = companyModels.Otp;
+
   if (!source) {
     return res
       .status(400)
@@ -96,7 +100,7 @@ const sendOTP = async (req, res) => {
         customer_id
       );
       if (smsResponse.response_code === "SUCCESS") {
-        await saveOTP(mobileNumber, otp);
+        await saveOTP(mobileNumber, otp, null, Otp);
         smsSent = true;
       } else {
         smsSent = false;
@@ -123,7 +127,7 @@ const sendOTP = async (req, res) => {
         emailResponse.response &&
         emailResponse.response.startsWith("250")
       ) {
-        await saveOTP(mobileNumber || "", otp, email);
+        await saveOTP(mobileNumber || "", otp, email, Otp);
         emailSent = true;
       } else {
         emailSent = false;
@@ -149,9 +153,9 @@ const sendOTP = async (req, res) => {
   }
 };
 
-const saveOTP = async (mobileNumber, otp, email) => {
+const saveOTP = async (mobileNumber, otp, email, OtpModel) => {
   const Uid = crypto.randomBytes(16).toString("hex");
-  const newOtp = new Otp({
+  const newOtp = new OtpModel({
     uid: Uid,
     mobile_number: mobileNumber,
     email: email,
@@ -181,8 +185,17 @@ const saveOTP = async (mobileNumber, otp, email) => {
 // };
 
 const verifyOTP = async (req, res) => {
-  const { mobileNumber, verificationCode, email, source } = req.body;
+  const { mobileNumber, verificationCode, email, source, customer_id } = req.body;
+  
+  if (!customer_id) {
+    return res.status(400).json({ error: "Customer ID is mandatory." });
+  }
+
   try {
+    // Get company-specific models
+    const companyModels = await getCompanyModels(customer_id);
+    const Otp = companyModels.Otp;
+
     if (source.includes("sms")) {
       if (!mobileNumber || !verificationCode) {
         return res.status(400).json({ error: `Missing required fields` });
