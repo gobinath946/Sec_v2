@@ -1,5 +1,4 @@
-const user = require("../models/model").User;
-const Customer = require("../models/model").Customer;
+const models = require("../models/model");
 const bcryptjs = require("bcryptjs");
 const crypto = require("crypto");
 const status_code = require("../Libs/constants");
@@ -51,7 +50,7 @@ const createuser = async (req, res) => {
   }
 
   try {
-    const existingUser = await user.findOne({
+    const existingUser = await models.User.findOne({
       $or: [{ email_id: userData.email_id }, { user_name: userData.user_name }],
     });
     if (existingUser) {
@@ -72,7 +71,7 @@ const createuser = async (req, res) => {
     );
     userData.password = hashedPassword;
     uid = crypto.randomBytes(16).toString("hex");
-    const existing_user_uid = await user.findOne({ user_uid: uid });
+    const existing_user_uid = await models.User.findOne({ user_uid: uid });
     if (existing_user_uid) {
       return res
         .status(status_code.DATA_DUPLICATE_STATUS)
@@ -80,7 +79,7 @@ const createuser = async (req, res) => {
     } else {
       userData.user_uid = uid;
     }
-    const newUser = new user(userData);
+    const newUser = new models.User(userData);
     await newUser.save();
 
     const customerData = {
@@ -94,7 +93,7 @@ const createuser = async (req, res) => {
       updated_at: Date.now(),
     };
 
-    const newCustomer = new Customer(customerData);
+    const newCustomer = new models.Customer(customerData);
     await newCustomer.save();
 
     // Initialize company-specific database
@@ -140,7 +139,7 @@ const Login = async (req, res) => {
       .json({ message: errorMessage });
   }
   try {
-    const users = await user.findOne({
+    const users = await models.User.findOne({
       email_id,
       is_deleted: false,
       is_active: true,
@@ -224,7 +223,7 @@ const logout = async (req, res) => {
   }
 
   try {
-    const users = await user.findOne({
+    const users = await models.User.findOne({
       email_id,
       is_active: true,
       is_deleted: false,
@@ -284,7 +283,7 @@ const getUser = async (req, res) => {
       .json({ message: "UID Is Required" });
   }
   try {
-    const users = await user.findOne(
+    const users = await models.User.findOne(
       { user_uid: uid, is_deleted: false, is_active: true },
       { _id: 0, token: 0, password: 0 }
     );
@@ -320,9 +319,9 @@ const getAllUser = async (req, res) => {
   }
   commonQuery.company_level_permissions = { $ne: "superadmin" };
   try {
-    const totalUsers = await user.countDocuments(commonQuery);
+    const totalUsers = await models.User.countDocuments(commonQuery);
     const totalPages = Math.ceil(totalUsers / dataPerPage);
-    const users = await user
+    const users = await models.User
       .find(commonQuery, projection)
       .skip((currentPage - 1) * dataPerPage)
       .limit(dataPerPage)
@@ -363,7 +362,7 @@ const updateUser = async (req, res) => {
   }
 
   try {
-    const existingUser = await user.findOne({
+    const existingUser = await models.User.findOne({
       user_uid: uid,
       is_active: true,
       is_deleted: false,
@@ -408,13 +407,13 @@ const updateUser = async (req, res) => {
         updateData.company_level_permissions =
           userData.company_level_permissions;
       }
-      const updatedUser = await user.findOneAndUpdate(
+      const updatedUser = await models.User.findOneAndUpdate(
         { user_uid: uid, is_active: true, is_deleted: false },
         updateData,
         { new: true, projection: { _id: 0, token: 0 } }
       );
       if (updatedUser) {
-        await Customer.updateOne(
+        await models.Customer.updateOne(
           { uid: uid, is_active: true, is_deleted: false },
           { $set: customerData }
         );
@@ -440,12 +439,12 @@ const deleteUser = async (req, res) => {
     return res.status(400).json({ message: "uid is required" });
   }
   try {
-    const deletedUser = await user.updateOne(
+    const deletedUser = await models.User.updateOne(
       { user_uid: uid, is_active: true, is_deleted: false },
       { $set: { is_deleted: true } }
     );
     if (deletedUser) {
-      await Customer.deleteMany({ uid: uid });
+      await models.Customer.deleteMany({ uid: uid });
       res
         .status(status_code.SUCCESS_STATUS)
         .json({ message: "User Deleted Successfully" });

@@ -16,10 +16,7 @@ const initializePrimaryDB = async () => {
   }
 
   try {
-    primaryConnection = await mongoose.createConnection(config.dbURL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    primaryConnection = await mongoose.createConnection(config.dbURL);
     
     console.log("✅ Primary DB connected successfully");
     return primaryConnection;
@@ -63,10 +60,7 @@ const getCompanyDB = async (companyId) => {
     const companyDbUrl = `${baseUrl}/${companyDbName}`;
 
     // Create new connection for company
-    const companyConnection = await mongoose.createConnection(companyDbUrl, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const companyConnection = await mongoose.createConnection(companyDbUrl);
 
     // Store the connection with original companyId as key
     companyConnections.set(companyId, companyConnection);

@@ -128,20 +128,38 @@ const injectCompanyModels = async (req, res, next) => {
   }
 };
 
-// Initialize and export primary models
-let Customer, User;
-try {
-  const primaryModels = getPrimaryModels();
-  Customer = primaryModels.Customer;
-  User = primaryModels.User;
-} catch (error) {
-  console.error("⚠️  Primary models not initialized. Call initializePrimaryDB first.");
-}
+// Lazy-loaded primary models - will be initialized on first access
+let _Customer, _User;
 
+// Export with getters
 module.exports = {
-  // Primary Models (always available)
-  Customer,
-  User,
+  // Getter for Customer model
+  get Customer() {
+    if (!_Customer) {
+      try {
+        const models = getPrimaryModels();
+        _Customer = models.Customer;
+      } catch (error) {
+        console.error("⚠️  Customer model not initialized:", error.message);
+        return null;
+      }
+    }
+    return _Customer;
+  },
+  
+  // Getter for User model
+  get User() {
+    if (!_User) {
+      try {
+        const models = getPrimaryModels();
+        _User = models.User;
+      } catch (error) {
+        console.error("⚠️  User model not initialized:", error.message);
+        return null;
+      }
+    }
+    return _User;
+  },
   
   // Functions to get company-specific models
   getCompanyModels,
