@@ -1,36 +1,63 @@
 const cron = require('node-cron');
-const Otp = require("../models/model").Otp;
-const Token = require("../models/model").Token;
-const Customer = require("../models/model").Customer;
-const User = require("../models/model").User;
+const { Customer, User, getCompanyModels } = require("../models/model");
 const axios = require('axios');
 const sendEmail = require('./sendemail')
 const status_code = require("./constants");
 
 
+// Deactivate expired OTPs across all company databases
 cron.schedule('*/5 * * * *', async () => {
     const fiveMinutesAgo = new Date(Date.now() - 300000);
     try {
-        await Otp.updateMany({ created_at: { $lt: fiveMinutesAgo }, is_active: true }, { $set: { is_active: false } });
+        const customers = await Customer.find({ is_active: true, is_deleted: false });
+        for (const customer of customers) {
+            try {
+                const models = await getCompanyModels(customer.uid);
+                await models.Otp.updateMany(
+                    { created_at: { $lt: fiveMinutesAgo }, is_active: true }, 
+                    { $set: { is_active: false } }
+                );
+            } catch (error) {
+                console.error(`Error deactivating OTPs for company ${customer.uid}: ${error.message}`);
+            }
+        }
     } catch (error) {
-        console.error(`Error deactivating expired OTPs: ${error.message}`);
+        console.error(`Error in OTP deactivation cron job: ${error.message}`);
     }
 });
 
+// Delete inactive OTPs across all company databases
 cron.schedule('0 0 * * *', async () => {
     try {
-        await Otp.deleteMany({ is_active: false });
+        const customers = await Customer.find({ is_active: true, is_deleted: false });
+        for (const customer of customers) {
+            try {
+                const models = await getCompanyModels(customer.uid);
+                await models.Otp.deleteMany({ is_active: false });
+            } catch (error) {
+                console.error(`Error deleting inactive OTPs for company ${customer.uid}: ${error.message}`);
+            }
+        }
     } catch (error) {
-        console.error(`Error deleting inactive OTPs: ${error.message}`);
+        console.error(`Error in OTP deletion cron job: ${error.message}`);
     }
 });
 
+// Delete old tokens across all company databases
 cron.schedule('0 0 * * *', async () => {
     const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
     try {
-        await Token.deleteMany({ created_at: { $lt: twentyFourHoursAgo } });
+        const customers = await Customer.find({ is_active: true, is_deleted: false });
+        for (const customer of customers) {
+            try {
+                const models = await getCompanyModels(customer.uid);
+                await models.Token.deleteMany({ created_at: { $lt: twentyFourHoursAgo } });
+            } catch (error) {
+                console.error(`Error deleting old tokens for company ${customer.uid}: ${error.message}`);
+            }
+        }
     } catch (error) {
-        console.error(`Error deleting tokens older than 24 hours: ${error.message}`);
+        console.error(`Error in token deletion cron job: ${error.message}`);
     }
 });
 
@@ -117,6 +144,12 @@ const cc = status_code.CREDIT_NOTIFICATION_CC;
 
 cron.schedule('*/3 * * * * *', async () => {
     try {
+        // Check if Customer and User models are available
+        if (!Customer || !User) {
+            console.log('⏳ Waiting for database initialization...');
+            return;
+        }
+
         const customers = await Customer.find({});
         for (const customer of customers) {
             const customerId = customer.uid;

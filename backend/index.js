@@ -17,6 +17,7 @@ const cronJobs = require("./src/Libs/cron")
 const swaggerUi = require('swagger-ui-express')
 const swaggerFile = require('./swagger-output.json')
 const config = require("./config/environment/dbDependencies");
+const { initializePrimaryDB } = require("./config/dbConnectionManager");
 const port = process.env.PORT || config.ServerPort;
 
 
@@ -37,10 +38,15 @@ const sendEmail = require('./src/finance/routes/email');
 
 
 
-mongoose
-  .connect(config.dbURL)
-  .then(() => { console.log("Connected to MongoDB"); })
-  .catch((err) => { console.error("MongoDB connection error:", err); });
+// Initialize Primary Database Connection
+initializePrimaryDB()
+  .then(() => { 
+    console.log("✅ Primary Database initialized successfully"); 
+  })
+  .catch((err) => { 
+    console.error("❌ Primary Database initialization error:", err); 
+    process.exit(1);
+  });
 
 
 //MiddleWares
@@ -111,10 +117,15 @@ app.get('/api/proxy/image', async (req, res) => {
 
 app.use("/api/v1/health", async (req, res) => {
   try {
-    if (mongoose.connection.readyState !== 1) {
-      throw new Error("MongoDB connection not established");
+    const { getPrimaryDB } = require("./config/dbConnectionManager");
+    const primaryDB = getPrimaryDB();
+    
+    if (primaryDB.readyState !== 1) {
+      throw new Error("Primary database connection not established");
     }
-    await mongoose.connection.db.command({ ping: 1 });
+    
+    await primaryDB.db.command({ ping: 1 });
+    
     res.json({
       status: "Database is healthy",
       health: "API Server is up & running",
