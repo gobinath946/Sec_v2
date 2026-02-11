@@ -1,12 +1,38 @@
 const cron = require('node-cron');
-const { Customer, User, getCompanyModels } = require("../models/model");
+const { getCompanyModels } = require("../models/model");
 const axios = require('axios');
 const sendEmail = require('./sendemail')
 const status_code = require("./constants");
 
+let Customer, User;
+let isInitialized = false;
+
+// Initialize models after database is ready
+const initializeCronJobs = () => {
+    if (isInitialized) return;
+    
+    try {
+        const models = require("../models/model");
+        Customer = models.Customer;
+        User = models.User;
+        
+        if (!Customer || !User) {
+            console.log('⏳ Cron jobs waiting for database models...');
+            return false;
+        }
+        
+        isInitialized = true;
+        console.log('✅ Cron jobs initialized successfully');
+        return true;
+    } catch (error) {
+        console.error('⚠️  Cron jobs initialization error:', error.message);
+        return false;
+    }
+};
 
 // Deactivate expired OTPs across all company databases
 cron.schedule('*/5 * * * *', async () => {
+    if (!initializeCronJobs()) return;
     const fiveMinutesAgo = new Date(Date.now() - 300000);
     try {
         const customers = await Customer.find({ is_active: true, is_deleted: false });
@@ -28,6 +54,8 @@ cron.schedule('*/5 * * * *', async () => {
 
 // Delete inactive OTPs across all company databases
 cron.schedule('0 0 * * *', async () => {
+    if (!initializeCronJobs()) return;
+    
     try {
         const customers = await Customer.find({ is_active: true, is_deleted: false });
         for (const customer of customers) {
@@ -45,6 +73,8 @@ cron.schedule('0 0 * * *', async () => {
 
 // Delete old tokens across all company databases
 cron.schedule('0 0 * * *', async () => {
+    if (!initializeCronJobs()) return;
+    
     const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
     try {
         const customers = await Customer.find({ is_active: true, is_deleted: false });
@@ -118,6 +148,8 @@ async function refreshDropboxAccessToken(customer) {
 }
 
 cron.schedule('0 */3 * * *', async () => {
+    if (!initializeCronJobs()) return;
+    
     try {
         const customers = await Customer.find({});
         for (const customer of customers) {
@@ -143,13 +175,9 @@ const to = status_code.CREDIT_NOTIFICATION_TO;
 const cc = status_code.CREDIT_NOTIFICATION_CC;
 
 cron.schedule('*/3 * * * * *', async () => {
+    if (!initializeCronJobs()) return;
+    
     try {
-        // Check if Customer and User models are available
-        if (!Customer || !User) {
-            console.log('⏳ Waiting for database initialization...');
-            return;
-        }
-
         const customers = await Customer.find({});
         for (const customer of customers) {
             const customerId = customer.uid;

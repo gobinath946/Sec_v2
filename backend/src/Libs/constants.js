@@ -32,8 +32,8 @@ module.exports = {
   // END_POINT:"https://dev-upkeep.securegateway.io/messagedetail/",
   SF_ERROR_EMAILS: "omegaleogaming@gmail.com",
   S3_CUSTOMER_REGION: "us-east-1",
-  S3_CUSTOMER_ACCESS_KEY: "AKIAVP43GH7C76OIMTC6",
-  S3_CUSTOMER_SECRET_KEY: "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",
+  S3_CUSTOMER_ACCESS_KEY: "",
+  S3_CUSTOMER_SECRET_KEY: "",
   S3_CUSTOMER_BUCKET_NAME: "securegateway-msg-service-dev",
   SECRET_KEY:
     "debb174bceec9d74b6f4065003f92a4483ffc7b9e1dd5a0f69cbc57ce24b56c3",
